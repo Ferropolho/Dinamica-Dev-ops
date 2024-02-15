@@ -73,11 +73,11 @@ def upload_file():
             item_name = result[0].data.decode("utf-8")
 
             try:
-                db_cur.execute(
-                    "SELECT * FROM Movies WHERE name='"
-                    + item_name
-                    + "' COLLATE NOCASE;"
-                )
+                db_cur.execute("""
+                    SELECT * FROM Movies WHERE name=
+                    %(item_name)s
+                    COLLATE NOCASE;
+                """)
                 query_result = db_cur.fetchall()
 
                 # Format query result for html
@@ -87,7 +87,8 @@ def upload_file():
                     )
 
                 if not query_result:
-                    error = "The barcode '" + item_name + "' returned no results"
+                    error = "The barcode %(item_name)s  returned no results"
+
 
             # Error with the sql query or multiple statements detected
             except (sqlite3.Warning, sqlite3.Error):
